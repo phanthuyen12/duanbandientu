@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import Swal from 'sweetalert2'; // Nhập SweetAlert2
 import AddressInfo from './AddAdressProfile';
+import HistoryBuy from './HistoryBuy';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate thay vì useHistory
+
 // Dummy components for different pages
 const handleLogout = () => {
   // Xóa token từ localStorage
@@ -22,14 +25,16 @@ const ProfileInfo = () => {
   });
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true); // Add loading state
+  const navigate = useNavigate(); // Khởi tạo useNavigate
 
   const tokenUser = localStorage.getItem('tokenUser');
 
   // Handle logout
   const handleLogout = () => {
-    localStorage.removeItem('tokenUser');
-    window.location.reload(); // Hoặc chuyển hướng tới trang đăng nhập
-  };
+    localStorage.clear();  // Xóa toàn bộ dữ liệu trong localStorage
+    window.location.reload();  // Hoặc chuyển hướng tới trang đăng nhập
+};
+
 
   const getInfo = () => {
     setLoading(true); // Set loading to true before making API call
@@ -42,7 +47,7 @@ const ProfileInfo = () => {
     })
       .then(response => response.json())
       .then(data => {
-        console.log(data);
+        console.log(data.user.Role);
         if (data.status === true) {
           setUserData(data.user); // Lưu dữ liệu người dùng vào state
         }
@@ -71,6 +76,10 @@ const ProfileInfo = () => {
     }
   }, [postdata]);
 
+  const handleAdminRedirect = () => {
+    navigate('/admin'); // Chuyển hướng đến trang admin
+  };
+
   return (
     <div className="account-card">
       <div className="account-title">
@@ -84,7 +93,7 @@ const ProfileInfo = () => {
               <input
                 type="text"
                 className="form-control"
-                value={userData?.Username || (loading ? "Đang tải..." : "Không có dữ liệu")} // Handle loading state
+                value={userData?.Username || (loading ? "Đang tải..." : "Không có dữ liệu")}
                 readOnly
               />
             </div>
@@ -95,7 +104,7 @@ const ProfileInfo = () => {
               <input
                 type="email"
                 className="form-control"
-                value={userData?.Email || (loading ? "Đang tải..." : "Không có dữ liệu")} // Handle loading state
+                value={userData?.Email || (loading ? "Đang tải..." : "Không có dữ liệu")}
                 readOnly
               />
             </div>
@@ -106,23 +115,31 @@ const ProfileInfo = () => {
               <input
                 type="text"
                 className="form-control"
-                value={userData?.PhoneNumber
-                  || (loading ? "Đang tải..." : "Không có dữ liệu")} // Handle loading state
+                value={userData?.PhoneNumber || (loading ? "Đang tải..." : "Không có dữ liệu")}
                 readOnly
               />
             </div>
           </div>
         </div>
-        {/* Hiển thị thông báo lỗi nếu có */}
-        {error && <div className="error-message">{error}</div>}
-        {/* Nút đăng xuất */}
-        <div className="row mt-3">
-          <div className="col-lg-12">
-            <button className="btn btn-danger btn-block" onClick={handleLogout}>
-              Đăng xuất
-            </button>
-          </div>
-        </div>
+        <div className="col-lg-6">
+      <button className="btn btn-danger btn-block" onClick={handleLogout}>
+        Đăng xuất
+      </button>
+    </div>
+      {/* Hiển thị thông báo lỗi nếu có */}
+{error && <div className="error-message">{error}</div>}
+{/* Nút điều hướng đến trang quản trị nếu là Admin */}
+{userData?.Role === 'Admin' && (
+  <div className="row mt-3">
+    <div className="col-lg-6">
+      <button className="btn btn-primary btn-block" onClick={handleAdminRedirect}>
+        Đi đến trang quản trị
+      </button>
+    </div>
+   
+  </div>
+)}
+
       </div>
     </div>
   );
@@ -183,6 +200,9 @@ const Profile = () => {
         return <AddressInfo />;
       case 'security':
         return <SecuritySettings />;
+      case 'historybuy':
+        return <HistoryBuy />;
+
       default:
         return <ProfileInfo />;
     }
@@ -215,6 +235,14 @@ const Profile = () => {
                 onClick={() => setActiveComponent('security')}
               >
                 <p><i className="fa-solid fa-shield-halved"></i> <span>Bảo mật</span></p>
+              </a>
+
+              <a
+                className={`sidebar_profile ${activeComponent === 'security' ? 'active' : ''}`}
+                href="#"
+                onClick={() => setActiveComponent('historybuy')}
+              >
+                <p><i className="fa-solid fa-shield-halved"></i> <span>Lịch Sứ Mua Hàng</span></p>
               </a>
             </div>
           </div>

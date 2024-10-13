@@ -25,7 +25,7 @@ export default function Login() {
 <HeaderTwo category={true} />
 
 {/* Breadcrumb */}
-<Breadcrumb title={"Account"} />
+<Breadcrumb title={"Đăng Nhập Tài Khoản"} />
 
 {/* Account */}
 <Account />

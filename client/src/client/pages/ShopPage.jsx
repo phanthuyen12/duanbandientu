@@ -10,60 +10,83 @@ import ColorInit from "../helper/ColorInit";
 import ScrollToTop from "react-scroll-to-top";
 import { ProductController } from '../../controller/productController.tsx';
 import { CategoryController } from '../../controller/categoryController.tsx';
-import { Link } from 'react-router-dom'
-import ReactSlider from 'react-slider'
+import { Link } from 'react-router-dom';
+import ReactSlider from 'react-slider';
 
 const ShopPage = () => {
-  const [dataProduct, setDataProduct] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [productsPerPage] = useState(10);
-  const [categories, setCategories] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const [priceRange, setPriceRange] = useState([0, 10000000]); // Khoảng giá tối đa 10 triệu VND
-  const [searchTerm, setSearchTerm] = useState(''); // State cho từ khóa tìm kiếm
-
-  // Hàm lấy dữ liệu sản phẩm
-  const showdataProduct = async () => {
-    const data = await ProductController.fetchProducts();
-    setDataProduct(data);
-  }
-
-  // Hàm lấy dữ liệu danh mục
-  const showdataCategory = async () => {
-    const data = await CategoryController.fetchCategories();
-    setCategories(data);
-  }
-
-  useEffect(() => {
-    showdataProduct();
-    showdataCategory();
-  }, []);
-
-  // Tính toán số lượng sản phẩm cho từng danh mục
-  const productCountByCategory = categories.map(category => ({
-    ...category,
-    ProductCount: dataProduct.filter(product => product.CategoryID === category.CategoryID).length
-  }));
-
-  // Lọc sản phẩm theo danh mục và khoảng giá
-  const filteredProducts = dataProduct.filter(product => 
-    (selectedCategory ? product.CategoryID === selectedCategory : true) &&
-    (product.Price >= priceRange[0] && product.Price <= priceRange[1]) && // Lọc theo giá VND
-    (product.ProductName.toLowerCase().includes(searchTerm.toLowerCase())) // Lọc theo tên sản phẩm
-  );
-
-  // Tính toán các chỉ số cho phân trang
-  const indexOfLastProduct = currentPage * productsPerPage;
-  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct); 
-
-  let [grid, setGrid] = useState(false)
-
-  let [active, setActive] = useState(false)
-  let sidebarController = () => {
-      setActive(!active)
-  }
-
+    const [dataProduct, setDataProduct] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [productsPerPage] = useState(10);
+    const [categories, setCategories] = useState([]);
+    const [selectedCategory, setSelectedCategory] = useState(null);
+    const [priceRange, setPriceRange] = useState([0, 10000000]); // Khoảng giá tối đa 10 triệu VND
+    const [searchTerm, setSearchTerm] = useState(''); // State cho từ khóa tìm kiếm
+    const [grid, setGrid] = useState(false);
+    const [active, setActive] = useState(false);
+  
+    // Hàm lấy dữ liệu sản phẩm
+    const showdataProduct = async () => {
+      const data = await ProductController.fetchProducts();
+      console.log("Products fetched:", data); // Console log dữ liệu sản phẩm
+      setDataProduct(data);
+    }
+  
+    // Hàm lấy dữ liệu danh mục
+    const showdataCategory = async () => {
+      const data = await CategoryController.fetchCategories();
+      console.log("Categories fetched:", data); // Console log dữ liệu danh mục
+      setCategories(data);
+    }
+  
+    useEffect(() => {
+      showdataProduct();
+      showdataCategory();
+    }, []);
+  
+    // Tính toán số lượng sản phẩm cho từng danh mục
+    const productCountByCategory = categories.map(category => {
+      const productCount = dataProduct.filter(product => product.CategoryID === category.CategoryID).length;
+      console.log(`Category: ${category.CategoryName}, Product Count: ${productCount}`); // Console log số lượng sản phẩm theo danh mục
+      return {
+        ...category,
+        ProductCount: productCount
+      };
+    });
+  
+    // Lọc sản phẩm theo danh mục và khoảng giá
+    // const filteredProducts = dataProduct.filter(product => {
+    //     console.log(product.ProductID); // In ra ProductID của sản phẩm
+    //     console.log(product.CategoryID ); // In ra ProductID của sản phẩm
+    //     console.log('selectedCategory'+selectedCategory)
+    //     return (
+    //         (selectedCategory ? product.CategoryID === selectedCategory : true) &&
+    //         (product.Price >= priceRange[0] && product.Price <= priceRange[1]) && // Lọc theo giá VND
+    //         (product.ProductName.toLowerCase().includes(searchTerm.toLowerCase())) // Lọc theo tên sản phẩm
+    //     );
+    // });
+    const filteredProducts = dataProduct.filter(product => {
+        console.log(product.ProductID); // In ra ProductID của sản phẩm
+        console.log(product.CategoryID); // In ra CategoryID của sản phẩm
+        console.log('selectedCategory: ' + selectedCategory);
+    
+        return selectedCategory ? product.CategoryID === selectedCategory : true;
+    });
+    
+    console.log("Filtered products:", filteredProducts); // Console log sản phẩm đã lọc
+  
+    // Tính toán các chỉ số cho phân trang
+    const indexOfLastProduct = currentPage * productsPerPage;
+    const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+    const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct); 
+  
+    console.log("Current products:", currentProducts); // Console log sản phẩm hiện tại
+  
+    // Hàm điều khiển sidebar
+    const sidebarController = () => {
+      setActive(!active);
+      console.log(`Sidebar is now ${!active ? 'open' : 'closed'}`); // Console log trạng thái sidebar
+    };
+  
 
   return (
     <>
@@ -212,7 +235,7 @@ const ShopPage = () => {
                         </div>
                         {/* Top End */}
                         <div className={`list-grid-wrapper ${grid && "list-view"}`}>
-                        {currentProducts .map(product => (
+                        {currentProducts.map(product => (
                 <div key={product.ProductID} className="product-card h-100 p-16 border border-gray-100 hover-border-main-600 rounded-16 position-relative transition-2">
                     <Link
                         to={`/product-details?id=${product.ProductID}`} // Thay đổi đường dẫn phù hợp
@@ -226,9 +249,9 @@ const ShopPage = () => {
     />
 </div>
 
-                        <span className="product-card__badge bg-primary-600 px-8 py-4 text-sm text-white position-absolute inset-inline-start-0 inset-block-start-0">
+                        {/* <span className="product-card__badge bg-primary-600 px-8 py-4 text-sm text-white position-absolute inset-inline-start-0 inset-block-start-0">
                             Best Sale{" "}
-                        </span>
+                        </span> */}
                     </Link>
                     <div className="product-card__content mt-16">
                         <h6 className="title text-lg fw-semibold mt-12 mb-8">
@@ -242,15 +265,15 @@ const ShopPage = () => {
                         </h6>
                         <div className="product-card__price my-20">
                             <span className="text-heading text-md fw-semibold ">
-                                {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.Price)} <span className="text-gray-500 fw-normal">/Qty</span>
+                                {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.Price)} <span className="text-gray-500 fw-normal">/Sản Phẩm</span>
                             </span>
                         </div>
-                        <Link
-                            to="/cart"
+                        <Link to={`/product-details?id=${product.ProductID}`}
+
                             className="product-card__cart btn bg-gray-50 text-heading hover-bg-main-600 hover-text-white py-11 px-24 rounded-8 flex-center gap-8 fw-medium"
                             tabIndex={0}
                         >
-                            Add To Cart <i className="ph ph-shopping-cart" />
+                            Thêm Vào Giỏ Hàng<i className="ph ph-shopping-cart" />
                         </Link>
                     </div>
                 </div>

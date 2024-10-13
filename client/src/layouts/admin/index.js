@@ -8,6 +8,7 @@ import { SidebarContext } from 'contexts/SidebarContext';
 import React, { useState } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import routes from 'routes';
+import { jwtDecode } from 'jwt-decode';
 
 // Custom Chakra theme
 export default function Dashboard(props) {
@@ -15,10 +16,23 @@ export default function Dashboard(props) {
   // states and functions
   const [fixed] = useState(false);
   const [toggleSidebar, setToggleSidebar] = useState(false);
+  
+  // Kiểm tra token
+  const token = localStorage.getItem('tokenUser');
+  const isAuthenticated = token !== null; 
+  let decodedToken = null;
+  if (isAuthenticated) {
+      decodedToken = jwtDecode(token);
+      console.log('giá trị id ' + decodedToken.Role);
+      console.log(token);
+  }
+  const isAdmin = decodedToken && decodedToken.Role === 'Admin';
+
   // functions for changing the states from components
   const getRoute = () => {
     return window.location.pathname !== '/admin/full-screen-maps';
   };
+  
   const getActiveRoute = (routes) => {
     let activeRoute = 'Default Brand Text';
     for (let i = 0; i < routes.length; i++) {
@@ -42,6 +56,7 @@ export default function Dashboard(props) {
     }
     return activeRoute;
   };
+  
   const getActiveNavbar = (routes) => {
     let activeNavbar = false;
     for (let i = 0; i < routes.length; i++) {
@@ -65,6 +80,7 @@ export default function Dashboard(props) {
     }
     return activeNavbar;
   };
+  
   const getActiveNavbarText = (routes) => {
     let activeNavbar = false;
     for (let i = 0; i < routes.length; i++) {
@@ -88,6 +104,7 @@ export default function Dashboard(props) {
     }
     return activeNavbar;
   };
+
   const getRoutes = (routes) => {
     return routes.map((route, key) => {
       if (route.layout === '/admin') {
@@ -102,9 +119,9 @@ export default function Dashboard(props) {
       }
     });
   };
-  document.documentElement.dir = 'ltr';
+  
   const { onOpen } = useDisclosure();
-  document.documentElement.dir = 'ltr';
+  
   return (
     <Box>
       <Box>
@@ -152,11 +169,17 @@ export default function Dashboard(props) {
                 pt="50px"
               >
                 <Routes>
-                  {getRoutes(routes)}
-                  <Route
-                    path="/"
-                    element={<Navigate to="/admin/default" replace />}
-                  />
+                  {isAuthenticated && isAdmin ?  (
+                    <>
+                      {getRoutes(routes)}
+                      <Route
+                        path="/"
+                        element={<Navigate to="/admin/default" replace />}
+                      />
+                    </>
+                  ) : (
+                    <Route path="*" element={<Navigate to="/login" replace />} />
+                  )}
                 </Routes>
               </Box>
             ) : null}

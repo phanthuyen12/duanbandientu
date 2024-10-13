@@ -1,321 +1,131 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import './Checkout.css'; // Import custom CSS for styling
 
 const Checkout = () => {
     const [selectedPayment, setSelectedPayment] = useState("payment1");
+    const [discountCode, setDiscountCode] = useState("");
+    const [products] = useState([
+        { id: 1, name: "Sản phẩm 1", quantity: 2, price: 100000 },
+        { id: 2, name: "Sản phẩm 2", quantity: 1, price: 50000 },
+        { id: 3, name: "Sản phẩm 3", quantity: 3, price: 150000 }
+    ]);
+    const [totalPrice, setTotalPrice] = useState(0);
+
+    const calculateTotalPrice = () => {
+        return products.reduce((acc, product) => acc + product.price * product.quantity, 0);
+    };
 
     const handlePaymentChange = (event) => {
         setSelectedPayment(event.target.id);
     };
+
+    const handleDiscountChange = (event) => {
+        setDiscountCode(event.target.value);
+    };
+
+    const handleApplyDiscount = () => {
+        if (discountCode === "DISCOUNT10") {
+            alert("Áp dụng giảm giá 10%");
+            setTotalPrice(totalPrice * 0.9); // Apply 10% discount
+        } else {
+            alert("Mã giảm giá không hợp lệ");
+        }
+    };
+
     return (
-        <section className="checkout py-80">
-            <div className="container container-lg">
-                <div className="border border-gray-100 rounded-8 px-30 py-20 mb-40">
-                    <span className="">
-                        Have a coupon?{" "}
-                        <Link
-                            to="/cart"
-                            className="fw-semibold text-gray-900 hover-text-decoration-underline hover-text-main-600"
-                        >
-                            Click here to enter your code
-                        </Link>{" "}
-                    </span>
-                </div>
-                <div className="row">
-                    <div className="col-xl-9 col-lg-8">
-                        <form action="#" className="pe-xl-5">
-                            <div className="row gy-3">
-                                <div className="col-sm-6 col-xs-6">
-                                    <input
-                                        type="text"
-                                        className="common-input border-gray-100"
-                                        placeholder="First Name"
-                                    />
-                                </div>
-                                <div className="col-sm-6 col-xs-6">
-                                    <input
-                                        type="text"
-                                        className="common-input border-gray-100"
-                                        placeholder="Last Name"
-                                    />
-                                </div>
-                                <div className="col-12">
-                                    <input
-                                        type="text"
-                                        className="common-input border-gray-100"
-                                        placeholder="Business Name"
-                                    />
-                                </div>
-                                <div className="col-12">
-                                    <input
-                                        type="text"
-                                        className="common-input border-gray-100"
-                                        placeholder="United states (US)"
-                                    />
-                                </div>
-                                <div className="col-12">
-                                    <input
-                                        type="text"
-                                        className="common-input border-gray-100"
-                                        placeholder="House number and street name"
-                                    />
-                                </div>
-                                <div className="col-12">
-                                    <input
-                                        type="text"
-                                        className="common-input border-gray-100"
-                                        placeholder="Apartment, suite, unit, etc. (Optional)"
-                                    />
-                                </div>
-                                <div className="col-12">
-                                    <input
-                                        type="text"
-                                        className="common-input border-gray-100"
-                                        placeholder="City"
-                                    />
-                                </div>
-                                <div className="col-12">
-                                    <input
-                                        type="text"
-                                        className="common-input border-gray-100"
-                                        placeholder="Sans Fransisco"
-                                    />
-                                </div>
-                                <div className="col-12">
-                                    <input
-                                        type="text"
-                                        className="common-input border-gray-100"
-                                        placeholder="Post Code"
-                                    />
-                                </div>
-                                <div className="col-12">
-                                    <input
-                                        type="number"
-                                        className="common-input border-gray-100"
-                                        placeholder="Phone"
-                                    />
-                                </div>
-                                <div className="col-12">
-                                    <input
-                                        type="email"
-                                        className="common-input border-gray-100"
-                                        placeholder="Email Address"
-                                    />
-                                </div>
-                                <div className="col-12">
-                                    <div className="my-40">
-                                        <h6 className="text-lg mb-24">Additional Information</h6>
-                                        <input
-                                            type="text"
-                                            className="common-input border-gray-100"
-                                            placeholder="Notes about your order, e.g. special notes for delivery."
-                                        />
-                                    </div>
-                                </div>
+        <section className="cart py-80">
+        <div className="container container-lg">
+          <div className="row gy-4">
+          <div className="address-section">
+                    <h2 className="payment-title">Địa chỉ nhận hàng</h2>
+                    <div className="address-details">
+                        <div className="address-info">
+                            <div className="address-name">
+                                phan gia thuyên (+84) 869895748
                             </div>
-                        </form>
-                    </div>
-                    <div className="col-xl-3 col-lg-4">
-                        <div className="checkout-sidebar">
-                            <div className="bg-color-three rounded-8 p-24 text-center">
-                                <span className="text-gray-900 text-xl fw-semibold">
-                                    Your Orders
-                                </span>
+                            <div className="address-full">
+                                Thị Trấn Đức An Đăk Song Đăk Nông, Thái Dương, Tổ 2, Thị Trấn Đức An, Huyện Đắk Song, Đắk Nông
                             </div>
-                            <div className="border border-gray-100 rounded-8 px-24 py-40 mt-24">
-                                <div className="mb-32 pb-32 border-bottom border-gray-100 flex-between gap-8">
-                                    <span className="text-gray-900 fw-medium text-xl font-heading-two">
-                                        Product
-                                    </span>
-                                    <span className="text-gray-900 fw-medium text-xl font-heading-two">
-                                        Subtotal
-                                    </span>
-                                </div>
-                                <div className="flex-between gap-24 mb-32">
-                                    <div className="flex-align gap-12">
-                                        <span className="text-gray-900 fw-normal text-md font-heading-two w-144">
-                                            HP Chromebook With Intel Celeron
-                                        </span>
-                                        <span className="text-gray-900 fw-normal text-md font-heading-two">
-                                            <i className="ph-bold ph-x" />
-                                        </span>
-                                        <span className="text-gray-900 fw-semibold text-md font-heading-two">
-                                            1
-                                        </span>
-                                    </div>
-                                    <span className="text-gray-900 fw-bold text-md font-heading-two">
-                                        $250.00
-                                    </span>
-                                </div>
-                                <div className="flex-between gap-24 mb-32">
-                                    <div className="flex-align gap-12">
-                                        <span className="text-gray-900 fw-normal text-md font-heading-two w-144">
-                                            HP Chromebook With Intel Celeron
-                                        </span>
-                                        <span className="text-gray-900 fw-normal text-md font-heading-two">
-                                            <i className="ph-bold ph-x" />
-                                        </span>
-                                        <span className="text-gray-900 fw-semibold text-md font-heading-two">
-                                            1
-                                        </span>
-                                    </div>
-                                    <span className="text-gray-900 fw-bold text-md font-heading-two">
-                                        $250.00
-                                    </span>
-                                </div>
-                                <div className="flex-between gap-24 mb-32">
-                                    <div className="flex-align gap-12">
-                                        <span className="text-gray-900 fw-normal text-md font-heading-two w-144">
-                                            HP Chromebook With Intel Celeron
-                                        </span>
-                                        <span className="text-gray-900 fw-normal text-md font-heading-two">
-                                            <i className="ph-bold ph-x" />
-                                        </span>
-                                        <span className="text-gray-900 fw-semibold text-md font-heading-two">
-                                            1
-                                        </span>
-                                    </div>
-                                    <span className="text-gray-900 fw-bold text-md font-heading-two">
-                                        $250.00
-                                    </span>
-                                </div>
-                                <div className="flex-between gap-24 mb-32">
-                                    <div className="flex-align gap-12">
-                                        <span className="text-gray-900 fw-normal text-md font-heading-two w-144">
-                                            HP Chromebook With Intel Celeron
-                                        </span>
-                                        <span className="text-gray-900 fw-normal text-md font-heading-two">
-                                            <i className="ph-bold ph-x" />
-                                        </span>
-                                        <span className="text-gray-900 fw-semibold text-md font-heading-two">
-                                            1
-                                        </span>
-                                    </div>
-                                    <span className="text-gray-900 fw-bold text-md font-heading-two">
-                                        $250.00
-                                    </span>
-                                </div>
-                                <div className="border-top border-gray-100 pt-30  mt-30">
-                                    <div className="mb-32 flex-between gap-8">
-                                        <span className="text-gray-900 font-heading-two text-xl fw-semibold">
-                                            Subtotal
-                                        </span>
-                                        <span className="text-gray-900 font-heading-two text-md fw-bold">
-                                            $859.00
-                                        </span>
-                                    </div>
-                                    <div className="mb-0 flex-between gap-8">
-                                        <span className="text-gray-900 font-heading-two text-xl fw-semibold">
-                                            Total
-                                        </span>
-                                        <span className="text-gray-900 font-heading-two text-md fw-bold">
-                                            $859.00
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="mt-32">
-                                <div className="payment-item">
-                                    <div className="form-check common-check common-radio py-16 mb-0">
-                                        <input
-                                            className="form-check-input"
-                                            type="radio"
-                                            name="payment"
-                                            id="payment1"
-                                            checked={selectedPayment === 'payment1'}
-                                            onChange={handlePaymentChange}
-                                        />
-                                        <label
-                                            className="form-check-label fw-semibold text-neutral-600"
-                                            htmlFor="payment1"
-                                        >
-                                            Direct Bank transfer
-                                        </label>
-                                    </div>
-                                    {selectedPayment === 'payment1' && (
-                                        <div className="payment-item__content px-16 py-24 rounded-8 bg-main-50 position-relative d-block">
-                                            <p className="text-gray-800">
-                                                Make your payment directly into our bank account. Please use your Order ID as the payment reference. Your order will not be shipped until the funds have cleared in our account.
-                                            </p>
-                                        </div>
-                                    )}
-                                </div>
-                                <div className="payment-item">
-                                    <div className="form-check common-check common-radio py-16 mb-0">
-                                        <input
-                                            className="form-check-input"
-                                            type="radio"
-                                            name="payment"
-                                            id="payment2"
-                                            checked={selectedPayment === 'payment2'}
-                                            onChange={handlePaymentChange}
-                                        />
-                                        <label
-                                            className="form-check-label fw-semibold text-neutral-600"
-                                            htmlFor="payment2"
-                                        >
-                                            Check payments
-                                        </label>
-                                    </div>
-                                    {selectedPayment === 'payment2' && (
-                                        <div className="payment-item__content px-16 py-24 rounded-8 bg-main-50 position-relative d-block">
-                                            <p className="text-gray-800">
-                                                Make your payment directly into our bank account. Please use your Order ID as the payment reference. Your order will not be shipped until the funds have cleared in our account.
-                                            </p>
-                                        </div>
-                                    )}
-                                </div>
-                                <div className="payment-item">
-                                    <div className="form-check common-check common-radio py-16 mb-0">
-                                        <input
-                                            className="form-check-input"
-                                            type="radio"
-                                            name="payment"
-                                            id="payment3"
-                                            checked={selectedPayment === 'payment3'}
-                                            onChange={handlePaymentChange}
-                                        />
-                                        <label
-                                            className="form-check-label fw-semibold text-neutral-600"
-                                            htmlFor="payment3"
-                                        >
-                                            Cash on delivery
-                                        </label>
-                                    </div>
-                                    {selectedPayment === 'payment3' && (
-                                        <div className="payment-item__content px-16 py-24 rounded-8 bg-main-50 position-relative d-block">
-                                            <p className="text-gray-800">
-                                                Make your payment directly into our bank account. Please use your Order ID as the payment reference. Your order will not be shipped until the funds have cleared in our account.
-                                            </p>
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                            <div className="mt-32 pt-32 border-top border-gray-100">
-                                <p className="text-gray-500">
-                                    Your personal data will be used to process your order, support
-                                    your experience throughout this website, and for other purposes
-                                    described in our{" "}
-                                    <Link to="#" className="text-main-600 text-decoration-underline">
-                                        {" "}
-                                        privacy policy
-                                    </Link>{" "}
-                                    .
-                                </p>
-                            </div>
-                            <Link
-                                to="/checkout"
-                                className="btn btn-main mt-40 py-18 w-100 rounded-8 mt-56"
-                            >
-                                Place Order
-                            </Link>
+                            <div className="address-default">Mặc định</div>
                         </div>
+                        <button className="change-btn">Thay đổi</button>
                     </div>
                 </div>
+            <div className="col-xl-9 col-lg-8">
+              <div className="cart-table border border-gray-100 rounded-8 px-40 py-48">
+                <div className="overflow-x-auto scroll-sm scroll-sm-horizontal">
+                  <table className="table style-three" >
+                    <thead style={{ padding: '100px' }}>
+                      <tr>
+                        <th className="h6 mb-0 text-lg fw-bold" style={{ padding: '20px', color: 'white' }}>Hành Động</th>
+                        <th className="h6 mb-0 text-lg fw-bold" style={{ padding: '20px', color: 'white' }}>Tên Sản Phẩm</th>
+                        <th className="h6 mb-0 text-lg fw-bold" style={{ padding: '20px', color: 'white' }}>Giá Sản Phẩm</th>
+                        <th className="h6 mb-0 text-lg fw-bold" style={{ padding: '20px', color: 'white' }}>Số Lượng</th>
+                        <th className="h6 mb-0 text-lg fw-bold" style={{ padding: '20px', color: 'white' }}>Tổng Tiền</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                     
+                    </tbody>
+                  </table>
+                </div>
+                <div className="flex-between flex-wrap gap-16 mt-16">
+                <div className="flex-align gap-16">
+  <input
+    type="text"
+    className="common-input"
+    placeholder="Áp Dụng Mã Giảm Giá"
+    value={discountCode} // State để lưu trữ mã giảm giá
+    onChange={(e) => setDiscountCode(e.target.value)} // Cập nhật giá trị mã giảm giá khi thay đổi input
+  />
+  <button
+    type="button"
+    className="btn btn-main py-18 w-100 rounded-8"
+    onClick={handleApplyDiscount} // Gọi hàm khi nhấn nút "Áp Dụng"
+  >
+    Áp Dụng
+  </button>
+</div>
+
+
+                </div>
+              </div>
             </div>
-        </section>
+            <div class="col-xl-3 col-lg-4">
+              <div class=" border border-gray-100 rounded-8 px-24 py-40">
+                <h6 class="text-xl mb-32">Tổng Giỏ Hàng</h6>
+                <div class="bg-color-three rounded-8 p-24">
+                  <div class="mb-32 d-flex justify-content-between gap-8">
+                    <span class="text-gray-900 font-heading-two">Tổng Tiền</span>
+                    <span className="text-gray-900 fw-semibold"></span>
+                    </div>
+                 
+                  <div class="mb-0 d-flex justify-content-between gap-8">
+                    <span class="text-gray-900 font-heading-two">Giá Sau Khi Áp Dụng</span>
+                    <span class="text-gray-900 fw-semibold">
+                 
 
-    )
-}
+                    </span>
+                  </div>
+                </div>
+                <div class="bg-color-three rounded-8 p-24 mt-24">
+                  <div class="d-flex justify-content-between gap-8">
+                    <span class="text-gray-900 text-xl fw-semibold">Tổng Tiền</span>
+                   
+                  </div>
+                </div>
+                <button
+      className="btn btn-main mt-40 py-18 w-100 rounded-8"
+    >
+      Đặt Hàng
+    </button>              </div>
+            </div>
 
-export default Checkout
+          </div>
+        </div>
+      </section>
+    );
+};
+
+export default Checkout;

@@ -125,3 +125,22 @@
   color: white;
   opacity: 1;
 }
+table {
+  border: none;
+  width: 100%; /* Chiếm toàn bộ chiều rộng */
+  border-collapse: collapse; /* Xóa khoảng cách giữa các ô */
+}
+
+// th, td {
+//   padding: 20px; /* Đặt padding cho các ô */
+//   color: white;
+
+// }
+// .css-1zts0j {
+ 
+//   color: #ffffff;
+ 
+.custom-modal-header {
+  background-color: #FA6800; /* Màu nền bạn muốn */
+  color: white; /* Màu chữ */
+}

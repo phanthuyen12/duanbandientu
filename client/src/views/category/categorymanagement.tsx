@@ -10,7 +10,7 @@ function CategoryOverview() {
     Description: string;
     ImageURL: string | File;
     status: string;
-    location:string;
+    location: string;
   }
 
   interface DataTable {
@@ -19,8 +19,8 @@ function CategoryOverview() {
     Description: string;
     ImageURL: string;
     status: string;
-    location:string;
-  
+    location: string;
+
   }
 
   const [showForm, setShowForm] = useState<boolean>(false);
@@ -31,7 +31,7 @@ function CategoryOverview() {
     Description: '',
     ImageURL: '',
     status: '',
-    location:'',
+    location: '',
   });
 
   const getdatcategory = async () => {
@@ -151,13 +151,13 @@ function CategoryOverview() {
                     <Table variant="striped" colorScheme="gray">
                       <Thead>
                         <Tr>
-                          <Th width="8%">Ưu tiên</Th>
-                          <Th>Tên chuyên mục con</Th>
-                          <Th>Liên kết tĩnh</Th>
-                          <Th>Thống kê</Th>
-                          <Th>Ảnh</Th>
-                          <Th>Trạng thái</Th>
-                          <Th>Thao tác</Th>
+                          <Th width="8%" color="white">Ưu tiên</Th>
+                          <Th color="white">Tên chuyên mục con</Th>
+                          <Th color="white">Liên kết tĩnh</Th>
+                          <Th color="white">Thống kê</Th>
+                          <Th color="white">Ảnh</Th>
+                          <Th color="white">Trạng thái</Th>
+                          <Th color="white">Thao tác</Th>
                         </Tr>
                       </Thead>
                       <Tbody>
@@ -171,29 +171,30 @@ function CategoryOverview() {
                             </Td>
                             <Td><img src={`http://localhost:3000/uploads/${selectedCategory.ImageURL}`} width="40px" alt={selectedCategory.CategoryName} /></Td>
                             <Td>
-  <select 
-    className="form-control" 
-    value={selectedCategory.status} 
-    onChange={(e) => {
-      const newStatus = e.target.value;
-      setCategoryData(prev => ({
-        ...prev,
-        status: newStatus,
-      }));    }}
-  >
-    <option value="1">ON</option>
-    <option value="0">OFF</option>
-  </select>
-</Td>
+                              <select
+                                className="form-control"
+                                value={selectedCategory.status}
+                                onChange={(e) => {
+                                  const newStatus = e.target.value;
+                                  setCategoryData(prev => ({
+                                    ...prev,
+                                    status: newStatus,
+                                  }));
+                                }}
+                              >
+                                <option value="1">ON</option>
+                                <option value="0">OFF</option>
+                              </select>
+                            </Td>
 
-<Td>
-  <a 
-    href={`http://localhost:3001/admin/category-edit?id=${selectedCategory.CategoryID}`} 
-    className="btn btn-primary"    
-  >
-    Edit
-  </a>
-                          <Button size="sm" colorScheme="red" ml={2}>Delete</Button>
+                            <Td>
+                              <a
+                                href={`http://localhost:3001/admin/category-edit?id=${selectedCategory.CategoryID}`}
+                                className="btn btn-primary"
+                              >
+                                Edit
+                              </a>
+                              <Button size="sm" colorScheme="red" ml={2}>Delete</Button>
                             </Td>
                           </Tr>
                         )}

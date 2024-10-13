@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import query from 'jquery';
 import { Link, NavLink } from 'react-router-dom';
+import { CategoryController } from '../../controller/categoryController.tsx';
+
 const HeaderTwo = ({ category }) => {
     const [scroll, setScroll] = useState(false)
     useEffect(() => {
@@ -61,7 +63,18 @@ const HeaderTwo = ({ category }) => {
     const handleCatClick = (index) => {
         setActiveIndexCat(activeIndexCat === index ? null : index);
     };
+    const[datacategory,setdatacategory] = useState([]);
+    const showdataCategory = async () => {
+        const data = await CategoryController.fetchCategories();
+        setdatacategory(data);
+      }
+    
+      useEffect(() => {
+        // showdataProduct();
+        showdataCategory();
+        console.log(datacategory);
 
+      }, []);
     return (
         <>
             <div className="overlay" />
@@ -104,101 +117,20 @@ const HeaderTwo = ({ category }) => {
                     <div className="mobile-menu__menu">
                         {/* Nav Menu Start */}
                         <ul className="nav-menu flex-align nav-menu--mobile">
-                            <li onClick={() => handleMenuClick(0)}
-                                className={`on-hover-item nav-menu__item has-submenu ${activeIndex === 0 ? "d-block" : ""
-                                    }`}
-                            >
+                           
+                        <li className="nav-menu__item">
                                 <Link to="/" className="nav-menu__link">
                                     Trang Chủ
                                 </Link>
-                                
                             </li>
-                            <li onClick={() => handleMenuClick(1)}
-                                className={`on-hover-item nav-menu__item has-submenu ${activeIndex === 1 ? "d-block" : ""
-                                    }`}
-                            >
-                                <Link to="#" className="nav-menu__link">
+                            <li className="nav-menu__item">
+                                <Link to="/shop" className="nav-menu__link">
                                     Cửa Hàng
                                 </Link>
-                                
-                            </li>
-                            <li onClick={() => handleMenuClick(2)}
-                                className={`on-hover-item nav-menu__item has-submenu ${activeIndex === 2 ? "d-block" : ""
-                                    }`}
-                            >
-                                <span className="badge-notification bg-warning-600 text-white text-sm py-2 px-8 rounded-4">
-                                    New
-                                </span>
-                                <Link to="#" className="nav-menu__link">
-                                    Pages
-                                </Link>
-                                <ul
-                                    className={`on-hover-dropdown common-dropdown nav-submenu scroll-sm ${activeIndex === 2 ? "open" : ""
-                                        }`}
-                                >
-                                    <li className="common-dropdown__item nav-submenu__item">
-                                        <Link onClick={() => setActiveIndex(null)}
-                                            to="/cart"
-                                            className="common-dropdown__link nav-submenu__link hover-bg-neutral-100"
-                                        >
-                                            {" "}
-                                            Cart
-                                        </Link>
-                                    </li>
-                                    <li className="common-dropdown__item nav-submenu__item">
-                                        <Link onClick={() => setActiveIndex(null)}
-                                            to="/checkout"
-                                            className="common-dropdown__link nav-submenu__link hover-bg-neutral-100"
-                                        >
-                                            {" "}
-                                            Checkout{" "}
-                                        </Link>
-                                    </li>
-                                    <li className="common-dropdown__item nav-submenu__item">
-                                        <Link onClick={() => setActiveIndex(null)}
-                                            to="/account"
-                                            className="common-dropdown__link nav-submenu__link hover-bg-neutral-100"
-                                        >
-                                            {" "}
-                                            Account
-                                        </Link>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li onClick={() => handleMenuClick(3)}
-                                className={`on-hover-item nav-menu__item has-submenu ${activeIndex === 3 ? "d-block" : ""
-                                    }`}
-                            >
-                                <Link to="#" className="nav-menu__link">
-                                    Blog
-                                </Link>
-                                <ul
-                                    className={`on-hover-dropdown common-dropdown nav-submenu scroll-sm ${activeIndex === 3 ? "open" : ""
-                                        }`}
-                                >
-                                    <li className="common-dropdown__item nav-submenu__item">
-                                        <Link onClick={() => setActiveIndex(null)}
-                                            to="/blog"
-                                            className="common-dropdown__link nav-submenu__link hover-bg-neutral-100"
-                                        >
-                                            {" "}
-                                            Blog
-                                        </Link>
-                                    </li>
-                                    <li className="common-dropdown__item nav-submenu__item">
-                                        <Link onClick={() => setActiveIndex(null)}
-                                            to="/blog-details"
-                                            className="common-dropdown__link nav-submenu__link hover-bg-neutral-100"
-                                        >
-                                            {" "}
-                                            Blog Details
-                                        </Link>
-                                    </li>
-                                </ul>
                             </li>
                             <li className="nav-menu__item">
                                 <Link to="/contact" className="nav-menu__link">
-                                    Contact Us
+                                    Liên Hệ
                                 </Link>
                             </li>
                         </ul>
@@ -616,7 +548,7 @@ const HeaderTwo = ({ category }) => {
                                     <span className="icon text-2xl d-xs-flex d-none">
                                         <i className="ph ph-dots-nine" />
                                     </span>
-                                    <span className="d-sm-flex d-none">All</span> Categories
+                                    <span className="d-sm-flex d-none">Danh </span> Mục
                                     <span className="arrow-icon text-xl d-flex">
                                         <i className="ph ph-caret-down" />
                                     </span>
@@ -634,277 +566,26 @@ const HeaderTwo = ({ category }) => {
                                         </Link>
                                     </div>
                                     <ul className="scroll-sm p-0 py-8 w-300 max-h-400 overflow-y-auto">
-                                        <li className="has-submenus-submenu">
-                                            <Link
-                                                to="#"
-                                                className="text-gray-500 text-15 py-12 px-16 flex-align gap-8 rounded-0"
-                                            >
-                                                <span className="text-xl d-flex">
-                                                    <i className="ph ph-carrot" />
-                                                </span>
-                                                <span>Vegetables &amp; Fruit</span>
-                                                <span className="icon text-md d-flex ms-auto">
-                                                    <i className="ph ph-caret-right" />
-                                                </span>
-                                            </Link>
-                                            <div className="submenus-submenu py-16">
-                                                <h6 className="text-lg px-16 submenus-submenu__title">
-                                                    Vegetables &amp; Fruit
-                                                </h6>
-                                                <ul className="submenus-submenu__list max-h-300 overflow-y-auto scroll-sm">
-                                                    <li>
-                                                        <Link to="/shop">Potato &amp; Tomato</Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link to="/shop">Cucumber &amp; Capsicum</Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link to="/shop">Leafy Vegetables</Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link to="/shop">Root Vegetables</Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link to="/shop">Beans &amp; Okra</Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link to="/shop">Cabbage &amp; Cauliflower</Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link to="/shop">Gourd &amp; Drumstick</Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link to="/shop">Specialty</Link>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </li>
-                                        <li className="has-submenus-submenu">
-                                            <Link
-                                                to="#"
-                                                className="text-gray-500 text-15 py-12 px-16 flex-align gap-8 rounded-0"
-                                            >
-                                                <span className="text-xl d-flex">
-                                                    <i className="ph ph-brandy" />
-                                                </span>
-                                                <span>Beverages</span>
-                                                <span className="icon text-md d-flex ms-auto">
-                                                    <i className="ph ph-caret-right" />
-                                                </span>
-                                            </Link>
-                                            <div className="submenus-submenu py-16">
-                                                <h6 className="text-lg px-16 submenus-submenu__title">
-                                                    Beverages
-                                                </h6>
-                                                <ul className="submenus-submenu__list max-h-300 overflow-y-auto scroll-sm">
-                                                    <li>
-                                                        <Link to="/shop">Soda &amp; Cocktail Mix </Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link to="/shop"> Sports &amp; Energy Drinks</Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link to="/shop"> Non Alcoholic Drinks</Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link to="/shop"> Packaged Water </Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link to="/shop"> Spring Water</Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link to="/shop"> Flavoured Water </Link>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </li>
-                                        <li className="has-submenus-submenu">
-                                            <Link
-                                                to="#"
-                                                className="text-gray-500 text-15 py-12 px-16 flex-align gap-8 rounded-0"
-                                            >
-                                                <span className="text-xl d-flex">
-                                                    <i className="ph ph-brandy" />
-                                                </span>
-                                                <span>Meats &amp; Seafood</span>
-                                                <span className="icon text-md d-flex ms-auto">
-                                                    <i className="ph ph-caret-right" />
-                                                </span>
-                                            </Link>
-                                            <div className="submenus-submenu py-16">
-                                                <h6 className="text-lg px-16 submenus-submenu__title">
-                                                    Meats &amp; Seafood
-                                                </h6>
-                                                <ul className="submenus-submenu__list max-h-300 overflow-y-auto scroll-sm">
-                                                    <li>
-                                                        <Link to="/shop"> Fresh Meat </Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link to="/shop"> Frozen Meat</Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link to="/shop"> Marinated Meat</Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link to="/shop"> Fresh &amp; Frozen Meat</Link>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </li>
-                                        <li className="has-submenus-submenu">
-                                            <Link
-                                                to="#"
-                                                className="text-gray-500 text-15 py-12 px-16 flex-align gap-8 rounded-0"
-                                            >
-                                                <span className="text-xl d-flex">
-                                                    <i className="ph ph-brandy" />
-                                                </span>
-                                                <span>Breakfast &amp; Dairy</span>
-                                                <span className="icon text-md d-flex ms-auto">
-                                                    <i className="ph ph-caret-right" />
-                                                </span>
-                                            </Link>
-                                            <div className="submenus-submenu py-16">
-                                                <h6 className="text-lg px-16 submenus-submenu__title">
-                                                    Breakfast &amp; Dairy
-                                                </h6>
-                                                <ul className="submenus-submenu__list max-h-300 overflow-y-auto scroll-sm">
-                                                    <li>
-                                                        <Link to="/shop"> Oats &amp; Porridge</Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link to="/shop"> Kids Cereal</Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link to="/shop"> Muesli</Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link to="/shop"> Flakes</Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link to="/shop"> Granola &amp; Cereal Bars</Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link to="/shop"> Instant Noodles</Link>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </li>
-                                        <li className="has-submenus-submenu">
-                                            <Link
-                                                to="#"
-                                                className="text-gray-500 text-15 py-12 px-16 flex-align gap-8 rounded-0"
-                                            >
-                                                <span className="text-xl d-flex">
-                                                    <i className="ph ph-brandy" />
-                                                </span>
-                                                <span>Frozen Foods</span>
-                                                <span className="icon text-md d-flex ms-auto">
-                                                    <i className="ph ph-caret-right" />
-                                                </span>
-                                            </Link>
-                                            <div className="submenus-submenu py-16">
-                                                <h6 className="text-lg px-16 submenus-submenu__title">
-                                                    Frozen Foods
-                                                </h6>
-                                                <ul className="submenus-submenu__list max-h-300 overflow-y-auto scroll-sm">
-                                                    <li>
-                                                        <Link to="/shop"> Instant Noodles </Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link to="/shop"> Hakka Noodles</Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link to="/shop"> Cup Noodles</Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link to="/shop"> Vermicelli</Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link to="/shop"> Instant Pasta</Link>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </li>
-                                        <li className="has-submenus-submenu">
-                                            <Link
-                                                to="#"
-                                                className="text-gray-500 text-15 py-12 px-16 flex-align gap-8 rounded-0"
-                                            >
-                                                <span className="text-xl d-flex">
-                                                    <i className="ph ph-brandy" />
-                                                </span>
-                                                <span>Biscuits &amp; Snacks</span>
-                                                <span className="icon text-md d-flex ms-auto">
-                                                    <i className="ph ph-caret-right" />
-                                                </span>
-                                            </Link>
-                                            <div className="submenus-submenu py-16">
-                                                <h6 className="text-lg px-16 submenus-submenu__title">
-                                                    Biscuits &amp; Snacks
-                                                </h6>
-                                                <ul className="submenus-submenu__list max-h-300 overflow-y-auto scroll-sm">
-                                                    <li>
-                                                        <Link to="/shop"> Salted Biscuits </Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link to="/shop"> Marie, Health, Digestive</Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link to="/shop"> Cream Biscuits &amp; Wafers </Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link to="/shop"> Glucose &amp; Milk biscuits</Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link to="/shop"> Cookies</Link>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </li>
-                                        <li className="has-submenus-submenu">
-                                            <Link
-                                                to="#"
-                                                className="text-gray-500 text-15 py-12 px-16 flex-align gap-8 rounded-0"
-                                            >
-                                                <span className="text-xl d-flex">
-                                                    <i className="ph ph-brandy" />
-                                                </span>
-                                                <span>Grocery &amp; Staples</span>
-                                                <span className="icon text-md d-flex ms-auto">
-                                                    <i className="ph ph-caret-right" />
-                                                </span>
-                                            </Link>
-                                            <div className="submenus-submenu py-16">
-                                                <h6 className="text-lg px-16 submenus-submenu__title">
-                                                    Grocery &amp; Staples
-                                                </h6>
-                                                <ul className="submenus-submenu__list max-h-300 overflow-y-auto scroll-sm">
-                                                    <li>
-                                                        <Link to="/shop"> Lemon, Ginger &amp; Garlic </Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link to="/shop"> Indian &amp; Exotic Herbs</Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link to="/shop"> Orangic Vegetables</Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link to="/shop">Orangic Fruits </Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link to="/shop"> Orangic Dry Fruits</Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link to="/shop"> Orangic Dals &amp; pulses</Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link to="/shop"> Orangic Millet &amp; Flours</Link>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </li>
-                                    </ul>
+                            {datacategory.length > 0 ? (
+                datacategory.map((category) => (
+                    <li className="has-submenus-submenu" key={category.CategoryID}>
+                        <Link
+                            to={`/shop/?category=${category.CategoryID}`} // Thay đường dẫn nếu cần
+                            className="text-gray-500 text-15 py-12 px-16 flex-align gap-8 rounded-0"
+                        >
+                            <span>{category.CategoryName}</span>
+                            <span className="icon text-md d-flex ms-auto">
+                                <i className="ph ph-caret-right" />
+                            </span>
+                        </Link>
+                    </li>
+                ))
+            ) : (
+                <li>No categories available</li>
+            )}
+                               
+                            </ul>
+                                    
                                 </div>
                             </div>
                             {/* Category Dropdown End  */}
@@ -912,25 +593,20 @@ const HeaderTwo = ({ category }) => {
                             <div className="header-menu d-lg-block d-none">
                                 {/* Nav Menu Start */}
                                 <ul className="nav-menu flex-align ">
-                                    <li className="on-hover-item nav-menu__item has-submenu">
-                                        <Link to="#" className="nav-menu__link">
+                                <li className="nav-menu__item">
+                                <Link to="/" className="nav-menu__link">
                                             Trang chủ
                                         </Link>
                                         
                                     </li>
-                                    <li className="on-hover-item nav-menu__item has-submenu">
-                                        <Link to="#" className="nav-menu__link">
+                                    <li className="nav-menu__item">
+                                        <Link to="/shop" className="nav-menu__link">
                                             Cửa Hàng
                                         </Link>
                                       
                                     </li>
                                   
-                                    <li className="on-hover-item nav-menu__item has-submenu">
-                                        <Link to="#" className="nav-menu__link">
-                                            Tin Tức
-                                        </Link>
-                                       
-                                    </li>
+                                   
                                     <li className="nav-menu__item">
                                         <NavLink to="/contact" className={(navData) =>
                                             navData.isActive ? "nav-menu__link activePage" : "nav-menu__link"

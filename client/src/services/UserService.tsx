@@ -1,5 +1,4 @@
-import { promise } from 'selenium-webdriver';
-import User from '../models/userModel.tsx'; // Đảm bảo import đúng mô hình
+import {User} from '../model/userModel.tsx'; // Đảm bảo import đúng mô hình
 
 const API_URL = 'http://localhost:3000/api/user/';
 

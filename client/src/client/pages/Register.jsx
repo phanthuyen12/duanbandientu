@@ -25,7 +25,7 @@ export default function Register() {
 <HeaderTwo category={true} />
 
 {/* Breadcrumb */}
-<Breadcrumb title={"Account"} />
+<Breadcrumb title={"Đăng Ký Tài Khoản"} />
 
 {/* Account */}
 <Account />

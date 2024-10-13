@@ -146,13 +146,13 @@ export default function ProductManagement() {
                     <Table variant="striped" colorScheme="teal" mt={4}>
                         <Thead>
                             <Tr>
-                                <Th>Ưu tiên</Th>
-                                <Th>Thao tác</Th>
-                                <Th>Sản phẩm</Th>
-                                <Th>Chuyên mục</Th>
-                                <Th>Trạng thái</Th>
-                                <Th>Giá bán</Th>
-                                <Th>Thời gian</Th>
+                            <Th color="white">Ưu tiên</Th>
+    <Th color="white">Thao tác</Th>
+    <Th color="white">Sản phẩm</Th>
+    <Th color="white">Chuyên mục</Th>
+    <Th color="white">Trạng thái</Th>
+    <Th color="white">Giá bán</Th>
+    <Th color="white">Thời gian</Th>
                             </Tr>
                         </Thead>
                         <Tbody>

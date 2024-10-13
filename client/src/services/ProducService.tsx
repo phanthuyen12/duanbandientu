@@ -51,7 +51,13 @@ export const ProductService = {
         }
         return response.json(); // Trả về dữ liệu JSON
     },
-
+    getProductNew : async ():Promise<Product>=>{
+        const response = await fetch(`${API_URL}new`);
+        if (!response.ok) {
+            throw new Error('Failed to fetch products'); // Ném lỗi nếu có
+        }
+        return response.json(); // Trả về dữ liệu JSON
+    },
     deleteProductByID: async (id: string): Promise<Product> => {
         const response = await fetch(`${API_URL}${id}`, {
             method: 'DELETE', // Sử dụng phương thức DELETE để xóa sản phẩm

@@ -135,6 +135,9 @@ const Register = () => {
                                         <button type="submit" className="btn btn-main py-18 px-40">
                                             Đăng Ký
                                         </button>
+                                        <Link to="/login" className="btn btn-secondary py-18 px-40">
+            Đăng Nhập
+        </Link>
                                     </div>
                                 </div>
 
@@ -143,7 +146,7 @@ const Register = () => {
                                         to="#"
                                         className="text-danger-600 text-sm fw-semibold hover-text-decoration-underline"
                                     >
-                                        Forgot your Password?
+                                        Quên Mật Khẩu ?
                                     </Link>
                                 </div>
                             </div>

@@ -26,8 +26,10 @@ import ContactPage from "./client/pages/ContactPage";
 import LoginPage from "./client/pages/Login";
 import RegisterPage from "./client/pages/Register";
 import CategoryManagement from './views/category/categorymanagement.tsx'; // Ensure the path starts with './'
+import VoucherManagement from './views/voucher/managentvoucher.tsx'; // Ensure the path starts with './'
 import Product from 'views/product/productmanagement.tsx';
 import Productcreate from 'views/product/createproduct.tsx';
+import UpdateVoucher from './views/voucher/updatevoucher.tsx';
 import ProtectedRoute from './ProtectedRoute';
 
 import {
@@ -47,27 +49,19 @@ export default function Main() {
             <RouteScrollToTop />
             <PhosphorIconInit />
       <Routes>
-        <Route path="auth/*" element={<AuthLayout />} />
-        
-        {/* Router cho admin và các trang bên trong */}
-        <Route
-          path="admin/*"
-          element={
-            <AdminLayout theme={currentTheme} setTheme={setCurrentTheme} />
-          }
-        />
+      <Route path="auth/*" element={<AuthLayout />} />
+
+{/* Router cho admin và các trang bên trong */}
 <Route path="admin/*" element={<AdminLayout theme={currentTheme} setTheme={setCurrentTheme} />}>
   <Route path="category-management" element={<CategoryManagement />} />
-</Route>
-<Route path="admin/*" element={<AdminLayout theme={currentTheme} setTheme={setCurrentTheme} />}>
   <Route path="category-edit" element={<CategoryManagement />} />
-</Route>
-<Route path="admin/*" element={<AdminLayout theme={currentTheme} setTheme={setCurrentTheme} />}>
-  <Route path="products-managent" element={<Product />} />
-</Route>
-<Route path="admin/*" element={<AdminLayout theme={currentTheme} setTheme={setCurrentTheme} />}>
+  <Route path="products-management" element={<Product />} />
   <Route path="products-create" element={<Productcreate />} />
+  <Route path="voucher-management" element={<VoucherManagement />} />
+  {/* <Route path="voucher-update" element={<VoucherManagement />} /> */}
 </Route>
+
+
         {/* Route cho client */}
         <Route path="client" element={<HomePageTwo />} />
             <Route exact path="/" element={<HomePageTwo />} />

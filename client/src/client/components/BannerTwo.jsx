@@ -1,7 +1,8 @@
-import React from 'react'
+import React, {useEffect,useState} from 'react'
 import { Link } from 'react-router-dom';
 import Slider from 'react-slick';
-
+import { ProductController } from '../../controller/productController.tsx';
+import { CategoryController } from '../../controller/categoryController.tsx';
 const BannerTwo = () => {
     const settings = {
         dots: true,
@@ -14,6 +15,18 @@ const BannerTwo = () => {
 
 
     };
+    const[datacategory,setdatacategory] = useState([]);
+    const showdataCategory = async () => {
+        const data = await CategoryController.fetchCategories();
+        setdatacategory(data);
+      }
+    
+      useEffect(() => {
+        // showdataProduct();
+        showdataCategory();
+        console.log(datacategory);
+
+      }, []);
     return (
         <div className="banner-two">
             <div className="container container-lg">
@@ -32,18 +45,23 @@ const BannerTwo = () => {
                                 </Link>
                             </div>
                             <ul className="responsive-dropdown__list scroll-sm p-0 py-8 overflow-y-auto ">
-                                <li className="has-submenus-submenu">
-                                    <Link
-                                        to="/thuyen"
-                                        className="text-gray-500 text-15 py-12 px-16 flex-align gap-8 rounded-0"
-                                    >
-                                        <span>Cell Phone</span>
-                                        <span className="icon text-md d-flex ms-auto">
-                                            <i className="ph ph-caret-right" />
-                                        </span>
-                                    </Link>
-                                   
-                                </li>
+                            {datacategory.length > 0 ? (
+                datacategory.map((category) => (
+                    <li className="has-submenus-submenu" key={category.CategoryID}>
+                        <Link
+                            to={`/shop/?category=${category.CategoryID}`} // Thay đường dẫn nếu cần
+                            className="text-gray-500 text-15 py-12 px-16 flex-align gap-8 rounded-0"
+                        >
+                            <span>{category.CategoryName}</span>
+                            <span className="icon text-md d-flex ms-auto">
+                                <i className="ph ph-caret-right" />
+                            </span>
+                        </Link>
+                    </li>
+                ))
+            ) : (
+                <li>No categories available</li>
+            )}
                                
                             </ul>
                         </div>

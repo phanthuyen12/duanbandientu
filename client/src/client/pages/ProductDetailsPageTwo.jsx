@@ -15,6 +15,7 @@ import { useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { addToProduct } from '../../redux/acction/cartActions.ts'; // Đảm bảo đường dẫn đúng
+import Swal from 'sweetalert2'; // Nhập SweetAlert2
 
 const ProductDetailsPageTwo = () => {
   
@@ -81,17 +82,9 @@ const ProductDetailsPageTwo = () => {
   const incrementQuantity = () => {
     setQuantity(prevQuantity => {
         const newQuantity = prevQuantity + 1;
-        // Cập nhật quantity trong product
-        setProduct(prevProduct => ({
-            ...prevProduct,
-            quantity: newQuantity
-        }));
-        return newQuantity;
-    });
-};  const decrementQuantity = () => {
-    setQuantity(prevQuantity => {
-        if (prevQuantity > 1) {
-            const newQuantity = prevQuantity - 1;
+
+        // Kiểm tra nếu newQuantity không vượt quá product.StockQuantity
+        if (newQuantity <= product.StockQuantity) {
             // Cập nhật quantity trong product
             setProduct(prevProduct => ({
                 ...prevProduct,
@@ -99,9 +92,27 @@ const ProductDetailsPageTwo = () => {
             }));
             return newQuantity;
         }
-        return prevQuantity;
+        
+        return prevQuantity; // Trả lại giá trị cũ nếu không hợp lệ
     });
 };
+
+const decrementQuantity = () => {
+    setQuantity(prevQuantity => {
+        if (prevQuantity > 1) {
+            const newQuantity = prevQuantity - 1;
+
+            // Cập nhật quantity trong product
+            setProduct(prevProduct => ({
+                ...prevProduct,
+                quantity: newQuantity
+            }));
+            return newQuantity;
+        }
+        return prevQuantity; // Trả lại giá trị cũ nếu không hợp lệ
+    });
+};
+
 
 
   const settingsThumbs = {
@@ -115,11 +126,53 @@ const ProductDetailsPageTwo = () => {
     centerPadding: '20px', // Khoảng cách giữa các hình ảnh
 };
 const handleAddToCart = () => {
-    // console.log('giá trị test')
-    console.log(product)
-      dispatch(addToProduct(product)); // Gửi action thêm sản phẩm vào giỏ hàng
+    // Lấy token từ localStorage
+    const tokenUser = localStorage.getItem('tokenUser');
+  
+    if (!tokenUser) {
+      // Nếu không có tokenUser, hiển thị thông báo yêu cầu đăng nhập
+      Swal.fire({
+        icon: 'error',
+        title: 'Bạn chưa đăng nhập!',
+        text: 'Vui lòng đăng nhập để tiếp tục.',
+        confirmButtonText: 'Đăng nhập'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.href = '/login'; // Điều hướng tới trang đăng nhập
+        }
+      });
+    } else {
+      // Nếu đã đăng nhập, thực hiện thêm sản phẩm vào giỏ hàng
+      try {
+        console.log(product);
+        dispatch(addToProduct(product)); // Gửi action thêm sản phẩm vào giỏ hàng
+  
+        // Hiển thị thông báo thành công
+        Swal.fire({
+          icon: 'success',
+          title: 'Thêm vào giỏ hàng thành công!',
+          text: `${product.name} đã được thêm vào giỏ hàng.`,
+          confirmButtonText: 'OK'
+        });
+      } catch (error) {
+        // Hiển thị thông báo lỗi nếu xảy ra lỗi
+        Swal.fire({
+          icon: 'error',
+          title: 'Có lỗi xảy ra!',
+          text: 'Không thể thêm sản phẩm vào giỏ hàng, vui lòng thử lại.',
+          confirmButtonText: 'Thử lại'
+        });
+      }
+    }
   };
-
+  
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat('vi-VN', {
+      style: 'currency',
+      currency: 'VND'
+    }).format(amount);
+  };
+  
   return (
     <>
       {/* ColorInit */}
@@ -135,7 +188,7 @@ const handleAddToCart = () => {
       <HeaderTwo category={true} />
 
       {/* Breadcrumb */}
-      <Breadcrumb title={"Product Details"} />
+      <Breadcrumb title={`${product.ProductName}`} />
 
       {/* ProductDetailsTwo */}
       <section className="product-details py-80">
@@ -181,7 +234,7 @@ const handleAddToCart = () => {
                             </div>
                             <div className="col-xl-6">
                                 <div className="product-details__content">
-                                    <div className="flex-center mb-24 flex-wrap gap-16 bg-color-one rounded-8 py-16 px-24 position-relative z-1">
+                                    {/* <div className="flex-center mb-24 flex-wrap gap-16 bg-color-one rounded-8 py-16 px-24 position-relative z-1">
                                         <img
                                             src="assets/images/bg/details-offer-bg.png"
                                             alt=""
@@ -209,7 +262,7 @@ const handleAddToCart = () => {
                                         <span className="text-white text-xs">
                                             Remains untill the end of the offer
                                         </span>
-                                    </div>
+                                    </div> */}
                                     <h5 className="mb-12">
                                         
                                     <h5 className="mb-12" dangerouslySetInnerHTML={{ __html: product.ProductName }} />
@@ -242,27 +295,26 @@ const handleAddToCart = () => {
                                         </span>
                                     </div>
                                     <span className="mt-32 pt-32 text-gray-700 border-top border-gray-100 d-block" />
-                                    <p className="text-gray-700">
-                                    {product.ShortDescription}
+                                    <p className="text-gray-700" dangerouslySetInnerHTML={{ __html: product.ShortDescription }} />
 
-                                    </p>
                                     {/* <p className="text-gray-700" dangerouslySetInnerHTML={{ __html: product.ShortDescription }}>
                                     </p> */}
                                     <div className="my-32 flex-align gap-16 flex-wrap">
                                         <div className="flex-align gap-8">
                                             <div className="flex-align gap-8 text-main-two-600">
                                                 <i className="ph-fill ph-seal-percent text-xl" />
-                                                -10%
+                                                Giá Sản Phẩm :
                                             </div>
-                                            <h6 className="mb-0"> {product.Price}
-                                            </h6>
+                                            
+                                            <h6 className=" mb-0">{formatCurrency(product.Price)}</h6>
+
                                         </div>
-                                        <div className="flex-align gap-8">
+                                        {/* <div className="flex-align gap-8">
                                             <span className="text-gray-700">Regular Price</span>
                                             <h6 className="text-xl text-gray-400 mb-0 fw-medium">
                                                 USD 452.99
                                             </h6>
-                                        </div>
+                                        </div> */}
                                     </div>
                                     <div className="my-32 flex-align flex-wrap gap-12">
                                         <Link
@@ -293,28 +345,7 @@ const handleAddToCart = () => {
                     </div>
                     <div className="col-xl-3">
                         <div className="product-details__sidebar py-40 px-32 border border-gray-100 rounded-16">
-                            <div className="mb-32">
-                                <label
-                                    htmlFor="delivery"
-                                    className="h6 activePage mb-8 text-heading fw-semibold d-block"
-                                >
-                                    Delivery
-                                </label>
-                                <div className="flex-align border border-gray-100 rounded-4 px-16">
-                                    <span className="text-xl d-flex text-main-600">
-                                        <i className="ph ph-map-pin" />
-                                    </span>
-                                    <select defaultValue={1}
-                                        className="common-input border-0 px-8 rounded-4"
-                                        id="delivery"
-                                    >
-                                        <option value={1}>Maymansign</option>
-                                        <option value={1}>Khulna</option>
-                                        <option value={1}>Rajshahi</option>
-                                        <option value={1}>Rangpur</option>
-                                    </select>
-                                </div>
-                            </div>
+                           
                             <div className="mb-32">
                                 <label
                                     htmlFor="stock"
@@ -353,27 +384,30 @@ const handleAddToCart = () => {
                             <div className="mb-32">
                                 <div className="flex-between flex-wrap gap-8 border-bottom border-gray-100 pb-16 mb-16">
                                     <span className="text-gray-500">Giá Sản Phẩm</span>
-                                    <h6 className="text-lg mb-0">{product.Price}</h6>
+                                    <h6 className="text-lg mb-0">
+  {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.Price)}
+</h6>
                                 </div>
                                 <div className="flex-between flex-wrap gap-8">
                                     <span className="text-gray-500">Tổng Tiền</span>
-                                    <h6 className="text-lg mb-0">{(product.Price * quantity).toFixed(2)} đ</h6>
+                                    <h6 className="text-lg mb-0">{formatCurrency(product.Price * quantity)}</h6>
                                     </div>
                             </div>
                             <button
-    className="btn btn-main flex-center gap-8 rounded-8 py-16 fw-normal mt-48"
-    onClick={handleAddToCart}
+  className="btn btn-main flex-center gap-8 rounded-8 py-16 fw-normal mt-8 w-100"
+  onClick={handleAddToCart}
 >
-    <i className="ph ph-shopping-cart-simple text-lg" />
-    Thêm Vào Giỏ Hàng
+  <i className="ph ph-shopping-cart-simple text-lg" />
+  Thêm Vào Giỏ Hàng
 </button>
 
-                            <Link
-                                to="#"
-                                className="btn btn-outline-main rounded-8 py-16 fw-normal mt-16 w-100"
-                            >
-                                Thanh Toán
-                            </Link>
+<Link
+  to="#"
+  className="btn btn-outline-main rounded-8 py-16 fw-normal mt-16 w-100"
+>
+  Thanh Toán
+</Link>
+
                            
                             <div className="mt-32">
                                 <div className="px-32 py-16 rounded-8 border border-gray-100 flex-between gap-8">
@@ -446,7 +480,7 @@ const handleAddToCart = () => {
                                         aria-controls="pills-description"
                                         aria-selected="true"
                                     >
-                                        Description
+                                        Mô Tả Sản Phẩm
                                     </button>
                                 </li>
                                
@@ -455,8 +489,7 @@ const handleAddToCart = () => {
                                 to="#"
                                 className="btn bg-color-one rounded-16 flex-align gap-8 text-main-600 hover-bg-main-600 hover-text-white"
                             >
-                                <img src="assets/images/icon/satisfaction-icon.png" alt="" />
-                                100% Satisfaction Guaranteed
+                              
                             </Link>
                         </div>
                         <div className="product-dContent__box">
@@ -469,7 +502,7 @@ const handleAddToCart = () => {
                                     tabIndex={0}
                                 >
                                     <div className="mb-40">
-                                        <h6 className="mb-24">Product Description</h6>
+                                        {/* <h6 className="mb-24">Product Description</h6> */}
                                       {/* {product.ShortDescription} */}
                                       <p dangerouslySetInnerHTML={{ __html: product.Description }} />
 
@@ -873,7 +906,7 @@ const handleAddToCart = () => {
             </div>
         </section>
       {/* NewArrivalTwo */}
-      <NewArrivalTwo />
+      {/* <NewArrivalTwo /> */}
 
       {/* ShippingOne */}
       <ShippingOne />

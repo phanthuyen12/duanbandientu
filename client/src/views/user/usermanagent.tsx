@@ -6,7 +6,6 @@ import {
     Icon,
     Select,
     SimpleGrid,
-    useColorModeValue,
     Table,
     Thead,
     Tbody,
@@ -20,6 +19,7 @@ import {
     ModalContent,
     ModalHeader,
     ModalCloseButton,
+    useColorModeValue,
     ModalBody,
     ModalFooter,
 } from "@chakra-ui/react";
@@ -39,6 +39,8 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function UserManagementView() {
+    const tableBg = useColorModeValue("white", "gray.800");
+
     const navigate = useNavigate();
     const brandColor = useColorModeValue("brand.500", "white");
     const boxBg = useColorModeValue("secondaryGray.300", "whiteAlpha.100");
@@ -185,14 +187,14 @@ export default function UserManagementView() {
                     <Table variant="striped" colorScheme="teal" size="sm">
                         <Thead>
                             <Tr>
-                                <Th>Hành Động</Th>
-                                <Th>User ID</Th>
-                                <Th>Username</Th>
-                                <Th>Email</Th>
-                                <Th>Phone Number</Th>
-                                <Th>Address</Th>
-                                <Th>Role</Th>
-                                <Th>Status</Th>
+                                <Th color={tableBg}>Hành Động</Th>
+                                <Th color={tableBg}>User ID</Th>
+                                <Th color={tableBg}>Username</Th>
+                                <Th color={tableBg}>Email</Th>
+                                <Th color={tableBg}>Phone Number</Th>
+                                <Th color={tableBg}>Address</Th>
+                                <Th color={tableBg}>Role</Th>
+                                <Th color={tableBg}>Status</Th>
                             </Tr>
                         </Thead>
                         <Tbody>

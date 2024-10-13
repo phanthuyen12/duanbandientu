@@ -77,7 +77,7 @@ const Login = () => {
                         {/* Login Card Start */}
                         <div className="col-xl-12 pe-xl-5">
                             <div className="border border-gray-100 hover-border-main-600 transition-1 rounded-16 px-24 py-40 h-100">
-                                <h6 className="text-xl mb-32">Login</h6>
+                                <h6 className="text-xl mb-32">Đăng Nhập Tài Khoản</h6>
                                
                                 <div className="mb-24">
                                     <label
@@ -120,24 +120,29 @@ const Login = () => {
                                     </div>
                                 </div>
                                 <div className="mb-24 mt-48">
-                                    <div className="flex-align gap-48 flex-wrap">
-                                        <button type="submit" className="btn btn-main py-18 px-40">
-                                            Đăng Nhập
-                                        </button>
-                                    
-                                    </div>
-                                </div>
+    <div className="flex-align gap-48 flex-wrap">
+        {/* Nút Đăng Nhập */}
+        <button type="submit" className="btn btn-main py-18 px-40">
+            Đăng Nhập
+        </button>
+
+        {/* Nút Đăng Ký */}
+        <Link to="/register" className="btn btn-secondary py-18 px-40">
+            Đăng Ký
+        </Link>
+    </div>
+</div>
                                 <div className="mt-48">
                                     <Link
                                         to="#"
                                         className="text-danger-600 text-sm fw-semibold hover-text-decoration-underline"
                                     >
-                                        Forgot your Password?
+                                        Quên Mật Khẩu
                                     </Link>
                                 </div>
                             </div>
                         </div>
-                        {/* Login Card End */}
+                        {/* Đăng Nhập Tài Khoản Card End */}
                         {/* Register Card Start */}
                    
                         {/* Register Card End */}

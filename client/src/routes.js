@@ -1,6 +1,8 @@
 import React from 'react';
 
 import { Icon } from '@chakra-ui/react';
+import jwtDecode from 'jwt-decode';
+
 import {
   MdBarChart,
   MdPerson,
@@ -8,6 +10,7 @@ import {
   MdLock,
   MdOutlineShoppingCart,
 } from 'react-icons/md';
+import SignInCentered from 'views/auth/signIn';
 
 // Admin Imports
 import MainDashboard from 'views/admin/default';
@@ -22,6 +25,10 @@ import Categoryedit from 'views/category/categoryedit.tsx';
 import Productedit from 'views/product/productedit.tsx';
 import UserManagent from 'views/user/usermanagent.tsx';
 import UserUpdate from 'views/user/updateuser.tsx';
+import VoucherManagement from './views/voucher/managentvoucher.tsx'; // Ensure the path starts with './'
+import OrderManagement from './views/order/orderManagent.tsx'; // Ensure the path starts with './'
+import Orderdetail from './views/order/orderDetail.tsx'; // Ensure the path starts with './'
+import UpdateVoucher from './views/voucher/updatevoucher.tsx';
 
 // Auth Imports
 
@@ -75,11 +82,19 @@ const routes = [
     hidden: true, // Thêm thuộc tính này để ẩn route khỏi menu
   },
   {
-    name: 'Dơn Hàng',
+    // name: 'Tạo Sản Phẩm', // Tên cho route tạo sản phẩm
     layout: '/admin',
-    path: '/default',
+    path: '/order-detail', // Đường dẫn mới cho việc tạo sản phẩm
+    icon: null, // Không có icon
+    component: <Orderdetail />, // Sử dụng component ProductCreate
+    hidden: true, // Thêm thuộc tính này để ẩn route khỏi menu
+  },
+  {
+    name: 'Đơn Hàng',
+    layout: '/admin',
+    path: '/order-managent',
     icon: <Icon as={MdHome} width="20px" height="20px" color="inherit" />,
-    component: <MainDashboard />,
+    component: <OrderManagement />,
   },
   {
     name: 'Thành Viên',
@@ -100,67 +115,41 @@ const routes = [
   {
     name: 'Phiếu Giảm Giá',
     layout: '/admin',
-    path: '/default',
+    path: '/voucher-managent',
     icon: <Icon as={MdHome} width="20px" height="20px" color="inherit" />,
-    component: <MainDashboard />,
+    component: <VoucherManagement />,
   },
-  {
-    name: 'Thanh Toán',
+    {
+    // name: 'Phiếu Giảm Giá',
     layout: '/admin',
-    path: '/default',
-    icon: <Icon as={MdHome} width="20px" height="20px" color="inherit" />,
-    component: <MainDashboard />,
+    path: '/voucher-update',
+    // icon: <Icon as={MdHome} width="20px" height="20px" color="inherit" />,
+    icon: null, // Không có icon
+    hidden: true, // Thêm thuộc tính này để ẩn route khỏi menu
+    component: <UpdateVoucher />,
   },
   {
-    name: 'Trang Web',
-    layout: '/admin',
-    path: '/default',
-    icon: <Icon as={MdHome} width="20px" height="20px" color="inherit" />,
-    component: <MainDashboard />,
+    layout: '/auth',
+    path: '/login',
+    icon: null, // Không có icon
+    hidden: true, // Thêm thuộc tính này để ẩn route khỏi menu
+    component: <SignInCentered />,
   },
-  {
-    name: 'NFT Marketplace',
-    layout: '/admin',
-    path: '/nft-marketplace',
-    icon: (
-      <Icon
-        as={MdOutlineShoppingCart}
-        width="20px"
-        height="20px"
-        color="inherit"
-      />
-    ),
-    component: <NFTMarketplace />,
-    secondary: true,
-  },
-  {
-    name: 'Data Tables',
-    layout: '/admin',
-    icon: <Icon as={MdBarChart} width="20px" height="20px" color="inherit" />,
-    path: '/data-tables',
-    component: <DataTables />,
-  },
-  {
-    name: 'Profile',
-    layout: '/admin',
-    path: '/profile',
-    icon: <Icon as={MdPerson} width="20px" height="20px" color="inherit" />,
-    component: <Profile />,
-  },
-  {
-    name: 'Sign In',
-    layout: '/admin',
-    path: '/category-management',
-    icon: <Icon as={MdLock} width="20px" height="20px" color="inherit" />,
-    component: <Category />,
-  },
-  {
-    name: 'RTL Admin',
-    layout: '/rtl',
-    path: '/rtl-default',
-    icon: <Icon as={MdHome} width="20px" height="20px" color="inherit" />,
-    component: <RTL />,
-  },
+  // {
+  //   name: 'Thanh Toán',
+  //   layout: '/admin',
+  //   path: '/default',
+  //   icon: <Icon as={MdHome} width="20px" height="20px" color="inherit" />,
+  //   component: <MainDashboard />,
+  // },
+  // {
+  //   name: 'Trang Web',
+  //   layout: '/admin',
+  //   path: '/default',
+  //   icon: <Icon as={MdHome} width="20px" height="20px" color="inherit" />,
+  //   component: <MainDashboard />,
+  // },
+ 
 ];
 
 export default routes;

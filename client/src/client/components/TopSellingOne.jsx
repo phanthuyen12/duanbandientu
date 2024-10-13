@@ -91,18 +91,20 @@ const TopSellingOne = () => {
                                     className="position-absolute inset-block-start-0 inset-inline-start-0 z-n1 w-100 h-100"
                                 />
                                 <div className="py-xl-4">
-                                    <h6 className="mb-4 fw-semibold">Polaroid Now+ Gen 2 - White</h6>
-                                    <h5 className="mb-40 fw-semibold">Fresh Vegetables</h5>
+                                    <h6 className="mb-4 fw-semibold">Apple AirPods Pro Gen 2</h6>
+                                    <h5 className="mb-40 fw-semibold">Siêu Ưu Đãi Tháng 3</h5>
                                     <Link
                                         to="/cart"
                                         className="btn text-heading border-neutral-600 hover-bg-neutral-600 hover-text-white py-16 px-24 flex-center d-inline-flex rounded-pill gap-8 fw-medium"
                                         tabIndex={0}
                                     >
-                                        Shop Now <i className="ph ph-shopping-cart text-xl d-flex" />
+                                        Mua Ngay <i className="ph ph-shopping-cart text-xl d-flex" />
                                     </Link>
                                 </div>
                                 <div className="d-md-block d-none mt-36">
-                                    <img src="assets/images/thumbs/deal-img.png" alt="" />
+                                <div style={{ width: '100%', textAlign: 'center' }}>
+    <img src="https://i.pinimg.com/originals/cf/96/a6/cf96a6027ed79cc0fefbdda2d0107f50.png" alt="" width="270px" style={{ display: 'block', margin: '0 auto' }} />
+</div>
                                 </div>
                             </div>
                         </div>

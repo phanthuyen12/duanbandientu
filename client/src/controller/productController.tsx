@@ -51,4 +51,13 @@ export class ProductController {
             throw error; // Ném lỗi ra ngoài để xử lý
         }
     }
+
+    static async getProductNew():Promise<Product>{
+        try {
+            return await ProductService.getProductNew(); // Gọi tới dịch vụ lấy tất cả sản phẩm
+        } catch (error) {
+            console.error('Error fetching products:', error);
+            throw error; // Ném lỗi ra ngoài để xử lý
+        }
+    }
 }
